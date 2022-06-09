@@ -29,3 +29,15 @@ class Place(models.Model):
         return self.title
 
 
+class Image(models.Model):
+    place = models.ForeignKey(Place, on_delete=models.CASCADE)
+    position_in_order = models.PositiveSmallIntegerField(default=0)
+    pict = models.ImageField()
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=('place', 'position_in_order'), name='unique_position'),
+        ]
+
+    def __str__(self):
+        return f'{self.position_in_order} in {self.place.title}'

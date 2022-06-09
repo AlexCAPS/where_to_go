@@ -13,10 +13,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+
+from where_to_go import settings
+from where_to_go.settings import DEBUG
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('artmap_app.urls'))
 ]
+
+if DEBUG:
+    # Media files must be transferred by webserver.
+    # NOT webapp
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

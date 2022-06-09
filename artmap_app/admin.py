@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 
-from artmap_app.models import Place
+from artmap_app.models import *
 
 
 class PlaceAdminForm(forms.ModelForm):
@@ -16,3 +16,8 @@ class PlaceAdminForm(forms.ModelForm):
 @admin.register(Place)
 class PlaceAdmin(admin.ModelAdmin):
     form = PlaceAdminForm
+
+
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    pass
