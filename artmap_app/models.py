@@ -1,12 +1,12 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.urls import reverse
 
 
 class Place(models.Model):
     title = models.CharField(max_length=127)
     description_short = models.CharField(max_length=255)
     description_long = models.TextField()
-    details_url = models.URLField(default='')
 
     lng = models.DecimalField(
         max_digits=17,
@@ -54,7 +54,7 @@ class Place(models.Model):
                 'properties': {
                     'title': place.title,
                     'placeId': place.pk,
-                    'detailsUrl': place.details_url,
+                    'detailsUrl': reverse('place_api', args=[place.pk]),
                 }
             }
             for place in Place.objects.order_by('-pk').all()[:top_slice]     # top new objects
