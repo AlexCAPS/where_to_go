@@ -29,6 +29,18 @@ class Place(models.Model):
     def __str__(self):
         return self.title
 
+    def to_dict(self):
+        return {
+            'title': self.title,
+            'imgs': [img.pict.url for img in self.image_set.all()],
+            'description_short': self.description_short,
+            'description_long': self.description_long,
+            'coordinates': {
+                'lng': self.lng,
+                'lat': self.lat,
+            },
+        }
+
     @staticmethod
     def prepare_geodata(top_slice=1000):
         features = [
