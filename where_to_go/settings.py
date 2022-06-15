@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'artmap_app.apps.ArtmapAppConfig',
     'adminsortable2',
+    'tinymce',
 ]
 
 MIDDLEWARE = [

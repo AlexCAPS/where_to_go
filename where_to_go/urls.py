@@ -22,7 +22,8 @@ from where_to_go.settings import DEBUG
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('artmap_app.urls'))
+    path('', include('artmap_app.urls')),
+    # path('tinymce/', include('tinymce.urls')),
 ]
 
 if DEBUG:
