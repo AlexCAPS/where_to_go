@@ -73,9 +73,7 @@ class Image(models.Model):
     pict = models.ImageField()
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=('place', 'position_in_order'), name='unique_position'),
-        ]
+        ordering = ['position_in_order']
 
     def __str__(self):
         return f'{self.position_in_order} in {self.place.title}'

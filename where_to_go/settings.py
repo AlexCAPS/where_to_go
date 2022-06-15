@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'artmap_app.apps.ArtmapAppConfig',
+    'adminsortable2',
 ]
 
 MIDDLEWARE = [

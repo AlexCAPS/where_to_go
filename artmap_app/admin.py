@@ -1,3 +1,4 @@
+from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminBase
 from django.contrib import admin
 from django.utils.html import format_html
 
@@ -5,7 +6,7 @@ from artmap_app.forms import PlaceAdminForm
 from artmap_app.models import *
 
 
-class InlineImageAdmin(admin.TabularInline):
+class InlineImageAdmin(SortableInlineAdminMixin, admin.TabularInline):
     model = Image
     readonly_fields = ['image_preview']
 
@@ -15,7 +16,7 @@ class InlineImageAdmin(admin.TabularInline):
 
 
 @admin.register(Place)
-class PlaceAdmin(admin.ModelAdmin):
+class PlaceAdmin(SortableAdminBase, admin.ModelAdmin):
     form = PlaceAdminForm
     inlines = [
         InlineImageAdmin,
