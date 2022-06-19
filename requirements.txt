@@ -3,3 +3,4 @@ Pillow
 django-admin-sortable2
 django-tinymce
 environs[django]
+requests
