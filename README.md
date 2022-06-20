@@ -85,3 +85,19 @@ Quit the server with CONTROL-C.
 ```shell
 ./manage.py runserver 0.0.0.0:8080
 ```
+
+### Импорт данных из json файлов
+
+Загрузите архив с json файлами и распакуйте его в каталог (например, `/tmp/places`)
+
+Выполните команду загрузки всех фалов из каталога:
+
+```shell
+find /tmp/places -name '*.json'  -exec ./manage.py load_place {} \;
+```
+
+## Цели проекта
+
+Код написан в учебных целях — это урок в курсе по Python и веб-разработке на сайте [Devman](https://dvmn.org).
+
+Тестовые данные взяты с сайта [KudaGo](https://kudago.com).
