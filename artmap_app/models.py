@@ -4,14 +4,13 @@ from django.core.exceptions import MultipleObjectsReturned
 from django.core.files.base import ContentFile
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from django.urls import reverse
 from tinymce.models import HTMLField
 
 
 class Place(models.Model):
     title = models.CharField(max_length=127)
-    description_short = models.CharField(max_length=511)
-    description_long = HTMLField()
+    description_short = models.TextField(blank=True)
+    description_long = HTMLField(blank=True)
 
     lng = models.DecimalField(
         max_digits=17,
@@ -37,7 +36,7 @@ class Place(models.Model):
     def to_dict(self):
         return {
             'title': self.title,
-            'imgs': [img.pict.url for img in self.image_set.all()],
+            'imgs': [img.pict.url for img in self.images.all()],
             'description_short': self.description_short,
             'description_long': self.description_long,
             'coordinates': {
@@ -45,31 +44,6 @@ class Place(models.Model):
                 'lat': self.lat,
             },
         }
-
-    @staticmethod
-    def prepare_geodata(top_slice=1000):
-        features = [
-            {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [place.lng, place.lat],
-
-                },
-                'properties': {
-                    'title': place.title,
-                    'placeId': place.pk,
-                    'detailsUrl': reverse('place_api', args=[place.pk]),
-                }
-            }
-            for place in Place.objects.order_by('-pk').all()[:top_slice]  # top new objects
-        ]
-
-        geodata = {
-            "type": "FeatureCollection",
-            "features": features,
-        }
-        return geodata
 
     @staticmethod
     def load_place(place_content: dict):
@@ -90,7 +64,7 @@ class Place(models.Model):
 
 
 class Image(models.Model):
-    place = models.ForeignKey(Place, on_delete=models.CASCADE)
+    place = models.ForeignKey(Place, on_delete=models.CASCADE, related_name='images')
     position_in_order = models.PositiveSmallIntegerField(default=0)
     pict = models.ImageField()
 

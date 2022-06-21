@@ -1,21 +1,21 @@
 import json
 from argparse import FileType
 
+import requests
 from django.core.management import BaseCommand
 from django.db import transaction
 
 from artmap_app.models import Place, Image
-from artmap_app.utils import download_image, download_place_file
 
 
 class Command(BaseCommand):
     help = 'Load place from file(s)'
 
     def add_arguments(self, parser):
-        parser.add_argument('place_dump_files', nargs='+', type=self.__json_source)
+        parser.add_argument('place_dump_filepaths', nargs='+', type=self.__json_source)
 
     def handle(self, *args, **options):
-        for dumped_place in options['place_dump_files']:
+        for dumped_place in options['place_dump_filepaths']:
             try:
                 self.import_place(dumped_place)
             except Exception as e:
@@ -28,7 +28,9 @@ class Command(BaseCommand):
     @staticmethod
     def __json_source(arg_string):
         if arg_string.startswith('http'):
-            return download_place_file(arg_string)
+            response = requests.get(arg_string)
+            response.raise_for_status()
+            return response.json()
         else:
             return json.load(FileType('r')(arg_string))
 
@@ -43,6 +45,9 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('Place info loaded'))
 
         for position, image_url in enumerate(place_content.get('imgs', [])):
-            image_content = download_image(image_url)
+            response = requests.get(image_url)
+            response.raise_for_status()
+
+            image_content = response.content
             image = Image.load_image(place, image_content, position)
             self.stdout.write(self.style.SUCCESS(f'Successfully loaded {image.pict.url}'))
