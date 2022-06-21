@@ -54,6 +54,12 @@ pip install -r requirements.txt
 * [MEDIA_URL](https://docs.djangoproject.com/en/4.0/ref/settings/#std-setting-MEDIA_URL)
 * [MEDIA_ROOT](https://docs.djangoproject.com/en/4.0/ref/settings/#std-setting-MEDIA_ROOT)
 
+#### Параметры приложения artmap_app
+
+* TOP_SLICE - ограничивает максимальное количество отображаемых на карте элементов. Таким образом на карте отображается 
+не более `TOP_SLICE` последних добавленных мест. Значение по умолчанию 1000.
+
+
 
 ### Инициализация базы данных
 

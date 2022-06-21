@@ -1,7 +1,9 @@
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from django.views.generic import TemplateView
 
+from artmap_app.apps import ArtmapAppConfig
 from artmap_app.models import Place
 
 
@@ -10,8 +12,37 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
-        context['places'] = Place.prepare_geodata()
+
+        top_slice = ArtmapAppConfig.top_slice
+        places = Place.objects.order_by('-pk').all()[:top_slice]  # top new objects
+        context['places'] = self._prepare_geodata(places)
+
         return context
+
+    @staticmethod
+    def _prepare_geodata(places):
+        features = [
+            {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [place.lng, place.lat],
+
+                },
+                'properties': {
+                    'title': place.title,
+                    'placeId': place.pk,
+                    'detailsUrl': reverse('place_api', args=[place.pk]),
+                }
+            }
+            for place in places
+        ]
+
+        geodata = {
+            "type": "FeatureCollection",
+            "features": features,
+        }
+        return geodata
 
 
 def places_view(request, pk):
