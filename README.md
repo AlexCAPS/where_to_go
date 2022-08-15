@@ -54,6 +54,19 @@ pip install -r requirements.txt
 * [MEDIA_URL](https://docs.djangoproject.com/en/4.0/ref/settings/#std-setting-MEDIA_URL)
 * [MEDIA_ROOT](https://docs.djangoproject.com/en/4.0/ref/settings/#std-setting-MEDIA_ROOT)
 
+Пример
+
+```dotenv
+SECRET_KEY="Not secret key"
+DEBUG=True
+ALLOWED_HOSTS=
+STATIC_URL='static/'
+STATIC_ROOT="./static_files"
+MEDIA_URL="media/"
+MEDIA_ROOT="media/"
+TOP_SLICE=1000
+```
+
 
 ### Инициализация базы данных
 
