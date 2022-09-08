@@ -66,7 +66,7 @@ class Place(models.Model):
 class Image(models.Model):
     place = models.ForeignKey(Place, on_delete=models.CASCADE, related_name='images')
     position_in_order = models.PositiveSmallIntegerField(default=0)
-    pict = models.ImageField()
+    pict = models.ImageField(upload_to='places')
 
     class Meta:
         ordering = ['position_in_order']
@@ -77,8 +77,8 @@ class Image(models.Model):
     @staticmethod
     def load_image(place: Place, image_content: bytes, position: int):
         # create image object in db
-        cf = ContentFile(image_content, name=md5(image_content).hexdigest())
-        image = Image.objects.create(place=place, pict=cf, position_in_order=position)
+        content_file = ContentFile(image_content, name=md5(image_content).hexdigest())
+        image = Image.objects.create(place=place, pict=content_file, position_in_order=position)
 
         return image
 

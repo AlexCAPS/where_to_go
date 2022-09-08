@@ -27,7 +27,7 @@ class Command(BaseCommand):
 
     @staticmethod
     def __json_source(arg_string):
-        if arg_string.startswith('http'):
+        if arg_string.startswith(('http://', 'https://')):
             response = requests.get(arg_string)
             response.raise_for_status()
             return response.json()
